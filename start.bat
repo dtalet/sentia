@@ -1,0 +1,1 @@
+powershell .\deploy.ps1 e9e5e663-b024-407e-897e-c14029282d9d Sentia westeurope Test Sentia 
