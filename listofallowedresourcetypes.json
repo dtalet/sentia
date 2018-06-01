@@ -1,0 +1,9 @@
+{
+    "RESOURCETYPESALLOWED":  {
+      "value": [
+        "Microsoft.Compute/virtualMachines",
+        "Microsoft.Network/virtualNetworks",
+        "Microsoft.Storage/storageAccounts"
+      ]
+    }
+}

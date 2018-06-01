@@ -29,12 +29,11 @@ param(
  [string]
  $subscriptionId,
 
- [Parameter(Mandatory=$True)]
  [string]
- $resourceGroupName,
+ $resourceGroupName = "Sentia",
 
  [string]
- $resourceGroupLocation,
+ $resourceGroupLocation = "westeurope",
 
  [string]
  $resourceEnvironment = "Test",
@@ -46,10 +45,10 @@ param(
  $deploymentName = "Deployment",
 
  [string]
- $templateFilePath = "template.json",
+ $templateFilePath = "deployment.json",
 
  [string]
- $parametersFilePath = "parameters.json"
+ $parametersFilePath = "deployment_parameters.json"
 )
 
 <#
@@ -113,3 +112,17 @@ if(Test-Path $parametersFilePath) {
 } else {
     New-AzureRmResourceGroupDeployment -Name $deploymentName -ResourceGroupName $resourceGroupName -TemplateFile $templateFilePath;
 }
+
+
+
+$policydefinitions = "initiative.json"
+$policysetparameters = "initiative_parameters.json"
+$listofallowedresourcetypes = "listOfAllowedResourceTypes.json"
+
+$policyset= New-AzureRmPolicySetDefinition -Name "resource-types-allowed" -DisplayName "Allowed Resource Types" -Description "This policy restricts the resource types to only allow: compute, network and storage resource types" -PolicyDefinition $policydefinitions -Parameter $policysetparameters
+ 
+New-AzureRmPolicyAssignment -PolicySetDefinition $policyset -Name "allowed-resource-types-subscription-assigment" -Scope /subscriptions/$subscriptionId -PolicyParameter $listofallowedresourcetypes
+
+New-AzureRmPolicyAssignment -PolicySetDefinition $policyset -Name "allowed-resource-types-resourcegroup-assignment" -Scope $resourceGroup.ResourceId -PolicyParameter $listofallowedresourcetypes 
+
+
