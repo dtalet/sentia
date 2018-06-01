@@ -96,7 +96,7 @@ if(!$resourceGroup)
         $resourceGroupLocation = Read-Host "resourceGroupLocation";
     }
     Write-Host "Creating resource group '$resourceGroupName' in location '$resourceGroupLocation'";
-    New-AzureRmResourceGroup -Name $resourceGroupName -Location $resourceGroupLocation -Tag @{ Environment=$resourceEnvironment; Company=$resourceCompany }
+    $resourceGroup = New-AzureRmResourceGroup -Name $resourceGroupName -Location $resourceGroupLocation -Tag @{ Environment=$resourceEnvironment; Company=$resourceCompany }
 }
 else{
     Write-Host "Using existing resource group '$resourceGroupName'";
