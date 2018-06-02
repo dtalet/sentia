@@ -23,16 +23,58 @@
       "metadata": {
         "description": "The value to use for starting the storage account name. Use only lowercase letters and numbers."
       }
+    },
+    "vnetPrefix": {
+      "type": "string",
+      "defaultValue": "172.16.0.0/12",
+      "metadata": {
+        "description": "The address prefix for the Virtual Network."
+      }
+    },
+    "vnetSubnet1Prefix": {
+      "type": "string",
+      "defaultValue": "172.16.0.0/24",
+      "metadata": {
+        "description": "The address prefix for the first subnet."
+      }
+    },
+    "vnetSubnet1Name": {
+      "type": "string",
+      "defaultValue": "Subnet-1",
+      "metadata": {
+        "description": "The name for the first subnet."
+      }
+    },
+    "vnetSubnet2Prefix": {
+      "type": "string",
+      "defaultValue": "172.16.1.0/24",
+      "metadata": {
+        "description": "The address prefix for the second subnet."
+      }
+    },
+    "vnetSubnet2Name": {
+      "type": "string",
+      "defaultValue": "Subnet-2",
+      "metadata": {
+        "description": "The name for the second subnet."
+      }
+    },
+    "vnetSubnet3Prefix": {
+      "type": "string",
+      "defaultValue": "172.16.2.0/24",
+      "metadata": {
+        "description": "The address prefix for the third subnet."
+      }
+    },
+    "vnetSubnet3Name": {
+      "type": "string",
+      "defaultValue": "Subnet-3",
+      "metadata": {
+        "description": "The name for the third subnet."
+      }
     }
   },
   "variables": {
-    "sentiaPrefix": "172.16.0.0/12",
-    "sentiaSubnet1Name": "Subnet-1",
-    "sentiaSubnet1Prefix": "172.16.0.0/24",
-    "sentiaSubnet2Name": "Subnet-2",
-    "sentiaSubnet2Prefix": "172.16.1.0/24",
-    "sentiaSubnet3Name": "Subnet-3",
-    "sentiaSubnet3Prefix": "172.16.2.0/24",
     "resourceName": "[concat(toLower(parameters('resourceNamePrefix')), uniqueString(resourceGroup().id))]"        
   },
   "resources": [
@@ -45,52 +87,45 @@
       },
       "kind": "Storage",
       "location": "[resourceGroup().location]",
-      "tags": {        
-        "Environment": "[resourceGroup().tags.Environment]",
-        "Company": "[resourceGroup().tags.Company]"
+      "tags": {                
       },
       "properties": {        
       }
     },
     {
       "name": "[variables('resourceName')]",
-            "type": "Microsoft.Network/virtualNetworks",
-            "location": "[resourceGroup().location]",
-            "apiVersion": "2015-06-15",
-            "dependsOn": [],
-            "tags": {                
-                "Environment": "[resourceGroup().tags.Environment]",
-                "Company": "[resourceGroup().tags.Company]"
-            },
+      "type": "Microsoft.Network/virtualNetworks",
+      "location": "[resourceGroup().location]",
+      "apiVersion": "2015-06-15",      
+      "tags": {                      
+      },
+      "properties": {
+        "addressSpace": {
+          "addressPrefixes": [
+            "[parameters('vnetPrefix')]"
+          ]
+        },
+        "subnets": [
+          {
+            "name": "[parameters('vnetSubnet1Name')]",
             "properties": {
-                "addressSpace": {
-                    "addressPrefixes": [
-                        "[variables('sentiaPrefix')]"
-                    ]
-                },
-                "subnets": [
-                    {
-                        "name": "[variables('sentiaSubnet1Name')]",
-                        "properties": {
-                            "addressPrefix": "[variables('sentiaSubnet1Prefix')]"
-                        }
-                    },
-                    {
-                        "name": "[variables('sentiaSubnet2Name')]",
-                        "properties": {
-                            "addressPrefix": "[variables('sentiaSubnet2Prefix')]"
-                        }
-                    },
-
-                    {
-                      "name": "[variables('sentiaSubnet3Name')]",
-                      "properties": {
-                          "addressPrefix": "[variables('sentiaSubnet3Prefix')]"
-                      }
-                  }
-                ]
+            "addressPrefix": "[parameters('vnetSubnet1Prefix')]"
             }
-
+          },
+          {
+            "name": "[parameters('vnetSubnet2Name')]",
+            "properties": {
+              "addressPrefix": "[parameters('vnetSubnet2Prefix')]"
+            }
+          },
+          {
+            "name": "[parameters('vnetSubnet3Name')]",
+            "properties": {
+              "addressPrefix": "[parameters('vnetSubnet3Prefix')]"
+            }
+          }
+        ]
+      }
     }
   ],
   "outputs": {  }

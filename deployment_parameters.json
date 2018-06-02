@@ -7,6 +7,29 @@
         },
         "resourceNamePrefix": {
             "value": "sentia"
+        },
+        "vnetPrefix": { 
+            "value": "172.16.0.0/12"
+        },    
+        "vnetSubnet1Prefix": { 
+            "value": "172.16.0.0/24"
+        },    
+        "vnetSubnet1Name": { 
+            "value": "Subnet-1"
+        },    
+        "vnetSubnet2Prefix": { 
+            "value": "172.16.1.0/24"
+        },
+        "vnetSubnet2Name": { 
+            "value": "Subnet-2"
+        },    
+        "vnetSubnet3Prefix": { 
+            "value": "172.16.2.0/24"
+        },
+        "vnetSubnet3Name": { 
+            "value": "Subnet-3"
         }
     }
 }
+
+
