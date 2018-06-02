@@ -1,3 +1,0 @@
-Para mirar el error con mas detalle:
-
-Get-AzureRMLog -CorrelationId xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx -DetailedOutput
