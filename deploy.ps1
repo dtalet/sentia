@@ -36,7 +36,7 @@ param(
  $resourceGroupLocation = "westeurope",
 
  [hashtable]
- $tags = @{Environment="Test";Company="Sentia";merda="puta"},
+ $tags = @{Environment="Test";Company="Sentia"},
 
  [string]
  $deploymentName = "Deployment",
@@ -66,6 +66,10 @@ Function RegisterRP {
 # Script body
 # Execution begins here
 #******************************************************************************
+
+Import-Module -Name AzureRM
+
+
 $ErrorActionPreference = "Stop"
 
 # sign in
@@ -119,15 +123,12 @@ if(Test-Path $parametersFilePath) {
 
 
 
+Write-Host "Enforcing tags from resource group to resources...";
 
-
-foreach ($item in $resourceGroup) 
+foreach ($g in $resourceGroup)
 {
-    Find-AzureRmResource -ResourceGroupNameEquals $item.ResourceGroupName | ForEach-Object {Set-AzureRmResource -ResourceId $item.ResourceId -Tag $item.Tags -Force } 
+    Get-AzureRmResource -ResourceGroupName $g.ResourceGroupName | ForEach-Object {Set-AzureRmResource -ResourceId $_.ResourceId -Tag $g.Tags -Force}
 }
-
-
-
 
 
 
