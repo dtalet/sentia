@@ -1,2 +1,0 @@
-# sentia
-sentia assessment

@@ -1,4 +1,20 @@
 {
+    "TAGNAME1": {
+      "value": "Environment"      
+    },
+
+    "TAGVALUE1": {
+      "value": "Test"      
+    },
+
+    "TAGNAME2": {
+      "value": "Company"
+    },
+
+    "TAGVALUE2": {
+      "value": "Sentia"      
+    },
+
     "RESOURCETYPESALLOWED":  {
       "value": [
         "Microsoft.Compute/availabilitySets",

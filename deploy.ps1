@@ -35,9 +35,6 @@ param(
  [string]
  $resourceGroupLocation = "westeurope",
 
- [hashtable]
- $tags = @{Environment="Test";Company="Sentia"},
-
  [string]
  $deploymentName = "Deployment",
 
@@ -45,7 +42,7 @@ param(
  $templateFilePath = "deployment.json",
 
  [string]
- $parametersFilePath = "deployment_parameters.json"
+ $parametersFilePath = "deployment-parameters.json"
 )
 
 
@@ -80,8 +77,10 @@ Login-AzureRmAccount;
 Write-Host "Selecting subscription '$subscriptionId'";
 Select-AzureRmSubscription -SubscriptionID $subscriptionId;
 
+
+
 # Register RPs
-$resourceProviders = @("microsoft.network","microsoft.storage","microsoft.compute");
+$resourceProviders = @("microsoft.network","microsoft.storage","microsoft.compute",'microsoft.policyinsights');
 if($resourceProviders.length) {
     Write-Host "Registering resource providers"
     foreach($resourceProvider in $resourceProviders) {
@@ -89,24 +88,57 @@ if($resourceProviders.length) {
     }
 }
 
+
+
+
+#(Get-AzureRmResourceProvider -ProviderNamespace Microsoft.Compute).ResourceTypes.ResourceTypeName
+#(Get-AzureRmResourceProvider -ProviderNamespace Microsoft.Network).ResourceTypes.ResourceTypeName
+#(Get-AzureRmResourceProvider -ProviderNamespace Microsoft.Storage).ResourceTypes.ResourceTypeName
+
+
+
+
+$initiativesubscription = "initiative-subscription.json"
+$initiativeresourcegroup = "initiative-resource-group.json"
+$initiativeparameters = "initiative-parameters.json"
+$initiativevaluelist = "initiative-value-list.json"
+
+
+Write-Host "Creating initiative policy set for the subscription...";
+$policyset= New-AzureRmPolicySetDefinition -Name "initiative-subscription" -DisplayName "Allowed Resource Types and tag assignment (subscription)" -Description "This policyset restricts the resource types allowed and assigns tags at the subscription level" -PolicyDefinition $initiativesubscription -Parameter $initiativeparameters
+
+Write-Host "Assigning initiative policy set to the subscription...";
+New-AzureRmPolicyAssignment -PolicySetDefinition $policyset -Name "initiative-subscription-assignment" -Description "This policy assignment restricts the resource types to only allow compute, network and storage resource types and assigns tags at the subscription level" -Scope /subscriptions/$subscriptionId -PolicyParameter $initiativevaluelist
+
+
+
 #Create or check for existing resource group
 $resourceGroup = Get-AzureRmResourceGroup -Name $resourceGroupName -ErrorAction SilentlyContinue
-if(!$resourceGroup)
+if(!$resourceGroup) 
 {
     Write-Host "Resource group '$resourceGroupName' does not exist.";
     if(!$resourceGroupLocation) {
         $resourceGroupLocation = Read-Host "resourceGroupLocation";
     }
-    Write-Host "Creating resource group '$resourceGroupName' in location '$resourceGroupLocation' and settings tags...";
-    $resourceGroup = New-AzureRmResourceGroup -Name $resourceGroupName -Location $resourceGroupLocation -Tag $tags
+    Write-Host "Creating resource group '$resourceGroupName' in location '$resourceGroupLocation' ...";    
+    $resourceGroup = New-AzureRmResourceGroup -Name $resourceGroupName -Location $resourceGroupLocation
 }
 else{
     Write-Host "Using existing resource group '$resourceGroupName'";
     
-    Write-Host "Enforcing tags to existing resource group...";
-    Set-AzureRmResourceGroup -Name $resourceGroupName -Tag $tags
-    
 }
+
+
+
+
+Write-Host "Creating initiative policy set for the resource group...";
+$policyset= New-AzureRmPolicySetDefinition -Name "initiative-resource-group" -DisplayName "Allowed Resource Types and tag assignment (resource group)" -Description "This policyset restricts the resource types allowed and assigns tags at the resource group level" -PolicyDefinition $initiativeresourcegroup -Parameter $initiativeparameters
+
+Write-Host "Assigning initiative policy set to the resource group...";
+New-AzureRmPolicyAssignment -PolicySetDefinition $policyset -Name "initiative-resource-group-assignment" -Description "This policy assignment restricts the resource types to only allow compute, network and storage resource types and assigns tags at the resource group level" -Scope $resourceGroup.ResourceId -PolicyParameter $initiativevaluelist
+
+
+
 
 
 # Start the deployment
@@ -123,32 +155,5 @@ if(Test-Path $parametersFilePath) {
 
 
 
-Write-Host "Enforcing tags from resource group to resources...";
-
-foreach ($g in $resourceGroup)
-{
-    Get-AzureRmResource -ResourceGroupName $g.ResourceGroupName | ForEach-Object {Set-AzureRmResource -ResourceId $_.ResourceId -Tag $g.Tags -Force}
-}
-
-
-
-
-$policydefinitions = "initiative.json"
-$policysetparameters = "initiative_parameters.json"
-
-#(Get-AzureRmResourceProvider -ProviderNamespace Microsoft.Compute).ResourceTypes.ResourceTypeName
-#(Get-AzureRmResourceProvider -ProviderNamespace Microsoft.Network).ResourceTypes.ResourceTypeName
-#(Get-AzureRmResourceProvider -ProviderNamespace Microsoft.Storage).ResourceTypes.ResourceTypeName
-
-$listofallowedresourcetypes = "listOfAllowedResourceTypes.json"
-
-Write-Host "Creating initiative policy set...";
-$policyset= New-AzureRmPolicySetDefinition -Name "resource-types-allowed" -DisplayName "Allowed Resource Types" -Description "This policyset restricts the resource types allowed" -PolicyDefinition $policydefinitions -Parameter $policysetparameters
-
-Write-Host "Assigning initiative policy set to subscription...";
-New-AzureRmPolicyAssignment -PolicySetDefinition $policyset -Name "allowed-resource-types-subscription-assigment" -Description "This policy assignment restricts the resource types to only allow: compute, network and storage resource types" -Scope /subscriptions/$subscriptionId -PolicyParameter $listofallowedresourcetypes
-
-Write-Host "Assigning initiative policy set to resource group...";
-New-AzureRmPolicyAssignment -PolicySetDefinition $policyset -Name "allowed-resource-types-resourcegroup-assignment" -Description "This policy assignment restricts the resource types to only allow: compute, network and storage resource types" -Scope $resourceGroup.ResourceId -PolicyParameter $listofallowedresourcetypes
 
 

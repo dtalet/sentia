@@ -1,0 +1,41 @@
+{
+    "RESOURCETYPESALLOWED": {
+       "type": "Array",
+       "metadata": {
+          "displayName": "Resource Types",
+          "strongType": "resourceTypes"
+       }
+    },    
+
+
+    "TAGNAME1": {
+       "type": "String",
+       "metadata": {
+          "displayName": "tag Name"           
+       }
+    },
+
+    "TAGVALUE1": {
+       "type": "String",
+       "metadata": {
+          "displayName": "tag Value"           
+       }
+    },
+
+
+    "TAGNAME2": {
+        "type": "String",
+        "metadata": {
+           "displayName": "tag Name"           
+        }
+     },
+ 
+     "TAGVALUE2": {
+        "type": "String",
+        "metadata": {
+           "displayName": "tag Value"           
+        }
+     }
+
+}
+ 

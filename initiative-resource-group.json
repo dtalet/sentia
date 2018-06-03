@@ -1,0 +1,36 @@
+[
+    {
+       "policyDefinitionId": "/providers/Microsoft.Authorization/policyDefinitions/a08ec900-254a-4555-9bf5-e42af04b5c5c",
+       "parameters": {
+          "listOfResourceTypesAllowed": {
+             "value": "[parameters('RESOURCETYPESALLOWED')]"
+          }
+       }
+    },
+    
+    {        
+       "policyDefinitionId": "/providers/Microsoft.Authorization/policyDefinitions/2a0e14a6-b0a6-4fab-991a-187a4f81c498",
+       "parameters": {
+           "tagName": {
+               "value": "[parameters('TAGNAME1')]"              
+           },
+           "tagValue": {
+               "value": "[parameters('TAGVALUE1')]"              
+           }
+       }
+    },
+
+    {        
+        "policyDefinitionId": "/providers/Microsoft.Authorization/policyDefinitions/2a0e14a6-b0a6-4fab-991a-187a4f81c498",
+        "parameters": {
+            "tagName": {
+                "value": "[parameters('TAGNAME2')]"              
+            },
+            "tagValue": {
+                "value": "[parameters('TAGVALUE2')]"              
+            }
+        }
+     }
+]
+ 
+
