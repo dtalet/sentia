@@ -47,9 +47,15 @@ To accomplish the above assessment, the following files are necessary and must b
 -	*initiative-value-list.json*	(the json values for both initiatives).
 -	*start.bat* (optional)	(a Windows batch file to trigger the deployment).
 
-Deployment can be launched executing in an elevated powershell console with administrator rights: *.\deploy.ps1* <subscriptionID>
 
-Also it can be triggered from a Windows admin command prompt: *start.bat*	
+
+Deployment can be launched executing in an elevated powershell console with administrator rights: 
+
+		.\deploy.ps1 <subscriptionID>
+
+Also it can be triggered from a Windows admin command prompt: 
+
+		start.bat (previosly modified to include <subscriptionID>) 
 
 ## Files description. ##
 
