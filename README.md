@@ -180,6 +180,15 @@ And finally, desired new tag values must be added in the *initiative-value-list.
 
 
 
+
+## Some things to keep in mind regarding these policies. ##
+
+- When a policy definition using the *append* effect is run as part of an evaluation cycle, it does not make changes to resources that *already exist*. Instead, it marks any resource that meets the if condition as *non-compliant*.
+
+- Keep in mind that once you have created an initiative assignment from an initiative definition, any new policy definitions added to the initiative definition automatically roll under the initiative assignment(s) under that initiative definition. However, if there’s a new parameter introduced to the new policy definition, you need to update the initiative definition and assignments by editing the initiative definition or assignment.
+
+
+
 ## Time Log. ##
 
 
