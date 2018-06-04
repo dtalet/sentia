@@ -55,7 +55,26 @@ Deployment can be launched executing in an elevated powershell console with admi
 
 Also it can be triggered from a Windows admin command prompt: 
 
-		start.bat (previosly modified to include <subscriptionID>) 
+		start.bat (previously modified to include <subscriptionID>) 
+
+
+*deploy.ps1* can be executed with the following parameters:
+
+- *subscriptionId* (mandatory). The Azure Subscription ID in the format: *xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx*
+
+- *resourceGroupName* (optional). Defaults to "Sentia".
+
+- *resourceGroupLocation* (optional). Defaults to "westeurope".
+
+- *deploymentName* (optional). Defaults to "Deployment".
+
+- *templateFilePath* (optional). Defaults to "deployment.json".
+
+- *parametersFilePath* (optional). Defaults to "deployment-parameters.json".
+
+
+		Example: .\deploy.ps1 <subscriptionID> newrg uksouth mydeploy deployment.json deployment-parameters.json 
+
 
 ## Files description. ##
 
@@ -87,6 +106,12 @@ Also it can be triggered from a Windows admin command prompt:
 - *initiative-parameters.json* is the json parameter definition for both initiatives
 
 - *initiative-value-list.json* contains the actual values used by both initiatives when assigning them.
+
+	To gather all resource types for the above commented resource providers i have used these powershell commands:
+
+		(Get-AzureRmResourceProvider -ProviderNamespace Microsoft.Compute).ResourceTypes.ResourceTypeName
+		(Get-AzureRmResourceProvider -ProviderNamespace Microsoft.Network).ResourceTypes.ResourceTypeName
+		(Get-AzureRmResourceProvider -ProviderNamespace Microsoft.Storage).ResourceTypes.ResourceTypeName  
 
 
 if other resource types were required to be allowed, it is enough to include them in the *Values* array named RESOURCETYPESALLOWED inside the *initiative-value-list.json* file.
@@ -152,3 +177,11 @@ And finally, desired new tag values must be added in the *initiative-value-list.
     "TAGVALUEx": {
       "value": "IT"      
     }
+
+
+
+## Time Log. ##
+
+
+To tell you the truth i just don't know exactly the time spent on every step of this assessment, i changed things one time and another until i felt comfortable with the results. I would say i have been working for 3 complete working days (8 hours each). I have never worked with policies and initiatives before so most of the time was spent on that. I also changed the way tags were applied to leverage policies to make it more flexible. 
+
