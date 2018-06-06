@@ -84,7 +84,7 @@ Also it can be triggered from a Windows admin command prompt:
 
 - *initiative-subscription.json* is the json definition of the initiative policy applied to the subscription. It contains 2 built-in policies:
 
-	- *Allowed resource types* (that restricts allowed resource types through and array parameter 'listOfResourceTypesAllowed')
+	- *Allowed resource types* (that restricts allowed resource types through an array parameter 'listOfResourceTypesAllowed')
 	- *Apply tag and its default value to resource groups* (that appends missing required tags to a resource group through string parameters 'tagName' and 'tagValue' )
 
 	**This second policy is repeated because two different tags are required to be applied to the resource group in the assessment.*
@@ -94,7 +94,7 @@ Also it can be triggered from a Windows admin command prompt:
 
 - *initiative-resource-group.json* is the json definition of the initiative policy applied to the resource group. It contains 2 built-in policies:
 
-	- *Allowed resource types* (that restricts allowed resource types through and array parameter 'listOfResourceTypesAllowed')
+	- *Allowed resource types* (that restricts allowed resource types through an array parameter 'listOfResourceTypesAllowed')
 	- *Apply tag and its default value* (that appends the same tags from the resource group to its resources through string parameters 'tagName' and 'tagValue' )
 
 	**This second policy is not required in the assessment but i thought it would be handy :).*
@@ -117,7 +117,7 @@ Also it can be triggered from a Windows admin command prompt:
 if other resource types were required to be allowed, it is enough to include them in the *Values* array named RESOURCETYPESALLOWED inside the *initiative-value-list.json* file.
 
 
-if other tags were required to include in the resource group, new copies of the built-in *Apply tag and its default value to resource groups* policy must be included in the *initiative-subscription.json* file with this format:
+if other tags were required to be included in the resource group, new copies of the built-in *Apply tag and its default value to resource groups* policy must be included in the *initiative-subscription.json* file with this format:
 
 	{        
         "policyDefinitionId": "/providers/Microsoft.Authorization/policyDefinitions/49c88fc8-6fd1-46fd-a676-f12d1d3a4c71",
